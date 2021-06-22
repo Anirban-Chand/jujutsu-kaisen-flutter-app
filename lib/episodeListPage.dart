@@ -1,4 +1,5 @@
 import 'package:anime_characters_op/episodes.dart';
+import 'package:anime_characters_op/playEpisode.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +13,7 @@ class EpisodeListPage extends StatefulWidget {
 class _EpisodeListPageState extends State<EpisodeListPage> {
   var url_episodes = 'https://api.jikan.moe/v3/anime/40748/episodes';
   Episode epis = Episode(episodes: []);
+  
 
   @override
   void initState() {
@@ -51,41 +53,53 @@ class _EpisodeListPageState extends State<EpisodeListPage> {
               itemBuilder: (context, index) {
                 final episode = epis.episodes[index];
 
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  elevation: 8.0,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          'Episode ${index + 1}:',
-                          style: GoogleFonts.nunitoSans(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          episode.title,
-                          style: GoogleFonts.nunitoSans(
-                              fontSize: 15, fontWeight: FontWeight.w800),
-                        ),
-                        Text(
-                          episode.titleJapanese == null
-                              ? 'Japanese Title Not Available'
-                              : episode.titleJapanese,
-                          style: GoogleFonts.nunitoSans(
-                              fontSize: 15, fontWeight: FontWeight.w800),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                      ],
+                return InkWell(
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    elevation: 8.0,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            'Episode ${index + 1}:',
+                            style: GoogleFonts.nunitoSans(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            episode.title,
+                            style: GoogleFonts.nunitoSans(
+                                fontSize: 15, fontWeight: FontWeight.w800),
+                          ),
+                          Text(
+                            episode.titleJapanese == null
+                                ? 'Japanese Title Not Available'
+                                : episode.titleJapanese,
+                            style: GoogleFonts.nunitoSans(
+                                fontSize: 15, fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlayEpisode(
+                          episodeUrl: episode.videoUrl,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
