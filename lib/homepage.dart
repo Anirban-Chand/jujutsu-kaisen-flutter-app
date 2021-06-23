@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     var decodedHeros = jsonDecode(res_heros.body);
     // converting json to protagonist object
     protagonist = Protagonist.fromJson(decodedHeros);
+    protagonist.characters.shuffle();
     setState(() {});
   }
 
@@ -196,6 +197,12 @@ class _HomePageState extends State<HomePage> {
                   )
                   .toList(),
             ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.refresh_rounded),
+        onPressed: () {
+          _fetchHeros();
+        },
+      ),
     );
   }
 }

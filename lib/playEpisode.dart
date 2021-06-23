@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_vpn/flutter_vpn.dart';
 
 class PlayEpisode extends StatefulWidget {
   final String episodeUrl;
@@ -12,10 +13,20 @@ class _PlayEpisodeState extends State<PlayEpisode> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
 
+  // VPN Service
+  var state = FlutterVpnState.disconnected;
+  CharonErrorState? charonState = CharonErrorState.NO_ERROR;
+
   @override
   void initState() {
     _controller = VideoPlayerController.network(widget.episodeUrl);
     _initializeVideoPlayerFuture = _controller.initialize();
+
+    // vpn service
+    FlutterVpn.prepare();
+    FlutterVpn.onStateChanged.listen((s) => setState(() => state = s));
+
+    // loop the video player
     _controller.setLooping(true);
 
     super.initState();
@@ -26,6 +37,9 @@ class _PlayEpisodeState extends State<PlayEpisode> {
   void dispose() {
     // Ensure disposing of the VideoPlayerController to free up resources.
     _controller.dispose();
+
+    // vpn disconnect
+    FlutterVpn.disconnect();
 
     super.dispose();
   }
@@ -62,6 +76,10 @@ class _PlayEpisodeState extends State<PlayEpisode> {
                         // If the video is paused, play it.
                         _controller.play();
                       }
+
+                      // vpn service starts
+                      FlutterVpn.simpleConnect(
+                          '219.100.37.196', 'vpn','vpn');
                     });
                   },
                   // Display the correct icon depending on the state of the player.

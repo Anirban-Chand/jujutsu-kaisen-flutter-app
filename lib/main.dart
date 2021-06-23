@@ -1,6 +1,5 @@
 import 'package:anime_characters_op/homepage.dart';
 import 'package:flutter/material.dart';
-
 void main() {
   runApp(MyApp());
 }
